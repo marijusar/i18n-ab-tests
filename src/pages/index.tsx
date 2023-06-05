@@ -8,8 +8,8 @@ import { GetStaticPropsContext } from "next";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const useFallbackNSTranslation = () => {
-  const ns = ["landing", "footer"];
+const useFallbackNSTranslation = (testId: number, namespace: string) => {
+  const ns = [`${namespace}.${testId}`, namespace];
   const { t } = useTranslation(ns);
 
   const fallbackT = (key: string) => {
@@ -25,15 +25,26 @@ const useFallbackNSTranslation = () => {
   return { t: fallbackT };
 };
 
-export default function Home() {
-  const { t } = useFallbackNSTranslation();
-  return <p>{t("Landing.Heading")}</p>;
+export default function Home({ testId }: { testId: number }) {
+  const { t } = useFallbackNSTranslation(testId, "landing");
+  return (
+    <div>
+      <p>{t("Landing.Heading")}</p>
+      <p>{t("Landing.Footer")}</p>
+    </div>
+  );
 }
 
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
+  const testId = 123;
+  const namespace = "landing";
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? "en", ["footer", "landing"])),
+      ...(await serverSideTranslations(locale ?? "en", [
+        `${namespace}.${testId}`,
+        namespace,
+      ])),
+      testId,
     },
   };
 }

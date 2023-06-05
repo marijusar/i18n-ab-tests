@@ -1,5 +1,6 @@
 {
   "Landing": {
-    "Heading2": "Welcome to the landing page"
+    "Heading": "Welcome to the landing page",
+    "Footer": "This is the footer"
   }
 }
